@@ -1,6 +1,6 @@
 package com.desafio_itau_backend.repository;
 
-import com.desafio_itau.desafio_itau.models.Transacao;
+import com.desafio_itau_backend.models.Transacao;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

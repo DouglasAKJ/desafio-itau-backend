@@ -1,5 +1,3 @@
-# desafio-itau-backend
-
 ## API Rest que recebe transações e retorna estatísticas das mesmas
 
 # Tecnologias

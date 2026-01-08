@@ -8,10 +8,10 @@
 		<version>3.5.9</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.desafio-itau</groupId>
-	<artifactId>desafio-itau</artifactId>
+	<groupId>com.desafio_itau</groupId>
+	<artifactId>desafio_itau</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>desafio-itau</name>
+	<name>desafio_itau</name>
 	<description>Resolução para o desafio do Itau</description>
 	<url/>
 	<licenses>

@@ -1,5 +1,15 @@
 # desafio-itau-backend
 
+## API Rest que recebe transações e retorna estatísticas das mesmas
+
+# Tecnologias
+- Java 21
+- Spring Boot 3.5.9
+- Maven
+
+Todas as funcionalidades básicas do projeto ja estão em perfeito funcionamento, porém o projeto está no processo de implementação de features extras, como testes automatizados, containerização, documentação e demais features bacanas!
+
+
 # Itaú Unibanco - Desafio de Programação
 
 Este é um desafio bacana tanto de desenvolvimento de software quanto de engenharia de software. Queremos testar sua capacidade de construir um software com várias partes diferentes funcionando em conjunto!

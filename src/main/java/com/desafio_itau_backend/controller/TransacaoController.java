@@ -12,17 +12,13 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/transacao")
+
 public class TransacaoController {
      TransacaoService transacaoService;
 
      TransacaoController(TransacaoService transacaoService){
          this.transacaoService = transacaoService;
      }
-
-    @GetMapping
-    ArrayList<Transacao> retornaTransacoes(){
-        return transacaoService.retornaTransacoes();
-    }
 
     @PostMapping
     ResponseEntity<?> recebeTransacao(@RequestBody TransacaoDTO transacaoDTO){
@@ -45,5 +41,10 @@ public class TransacaoController {
     ResponseEntity<?> deletaTransacao(){
         transacaoService.deletaTransacoes();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    ResponseEntity<?> retornaTransacoes(){
+         return ResponseEntity.ok(transacaoService.retornaTransacoes(5000));
     }
 }

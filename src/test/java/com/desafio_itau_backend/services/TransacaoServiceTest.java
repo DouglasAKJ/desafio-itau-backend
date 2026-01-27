@@ -1,5 +1,6 @@
 package com.desafio_itau_backend.services;
 
+import com.desafio_itau_backend.dto.TransacaoDTO;
 import com.desafio_itau_backend.models.Estatistica;
 import com.desafio_itau_backend.models.Transacao;
 import com.desafio_itau_backend.repository.TransacaoList;
@@ -8,11 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.assertj.core.api.Assertions;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,32 +25,38 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 public class TransacaoServiceTest {
 
-    @InjectMocks
     TransacaoService transacaoService;
 
-    Transacao transacao;
-
-    MockMvc mockMvc;
+    TransacaoDTO transacao;
 
     @BeforeEach
     void setup(){
-        transacao = new Transacao(Math.random(), OffsetDateTime.now());
+        transacaoService = new TransacaoService();
+        transacao = new TransacaoDTO(Math.random(), OffsetDateTime.now().minusSeconds(10));
     }
 
     @Test
     void adicionaTransacaoValid(){
 
-        transacaoService.adicionarTransacao(transacao);
 
+        transacaoService.adicionarTransacao(transacao);
 
         List<Transacao> transacoes = transacaoService.retornaTransacoes(60);
 
-        assertTrue(transacoes.contains(transacao));
+        assertFalse(transacoes.isEmpty());
+        assertEquals(transacao.valor(), transacoes.getFirst().getValor());
+
 
     }
 
     @Test
     void adicionaTransacaoInvalid(){
+
+        TransacaoDTO transacaoDTO = new TransacaoDTO(100.00, OffsetDateTime.now().plusSeconds(100));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            transacaoService.adicionarTransacao(transacaoDTO);
+        });
 
     }
 
@@ -59,7 +68,7 @@ public class TransacaoServiceTest {
     }
 
     @Test
-    void criaEstatisticaWithData(){
+    void criaEstatisticaWithData() throws Exception{
 
         transacaoService.adicionarTransacao(transacao);
 

@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.desafio_itau_backend.dto.TransacaoDTO;
 import com.desafio_itau_backend.models.Transacao;
 import com.desafio_itau_backend.services.TransacaoService;
 import com.desafio_itau_backend.services.TransacaoServiceTest;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -35,7 +37,7 @@ public class TransacaoTest {
     @Autowired
     final ObjectMapper objectMapper = new ObjectMapper();
 
-    Transacao transacao;
+    TransacaoDTO transacao;
 
     MockMvc mockMvc;
 
@@ -43,11 +45,11 @@ public class TransacaoTest {
     void setup(){
         objectMapper.registerModule(new JavaTimeModule());
         mockMvc = MockMvcBuilders.standaloneSetup(transacaoController).build();
-        transacao = new Transacao(Math.random(), OffsetDateTime.now());
+        transacao = new TransacaoDTO(Math.random(), OffsetDateTime.now());
     }
 
     @Test
-    void adicionaTransacaoValida() throws Exception {
+    void adicionaTransacaoValida() throws Exception{
 
         mockMvc.perform(post("/transacao")
                 .content(objectMapper.writeValueAsString(transacao))
@@ -59,11 +61,15 @@ public class TransacaoTest {
 
     @Test
     void geraErroAdicionaTransacao() throws Exception {
-        Transacao transacaoFail = new Transacao(-200.0, OffsetDateTime.now());
+
+        Mockito.doThrow(new IllegalArgumentException("Transação inválida"))
+                .when(transacaoService)
+                .adicionarTransacao(Mockito.any());
+
         mockMvc.perform(post("/transacao")
-                        .content(objectMapper.writeValueAsString(transacaoFail))
+                        .content(objectMapper.writeValueAsString(transacao))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isUnprocessableEntity());
 
 
     }

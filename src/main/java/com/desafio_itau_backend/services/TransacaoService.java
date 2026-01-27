@@ -1,8 +1,10 @@
 package com.desafio_itau_backend.services;
 
+import com.desafio_itau_backend.dto.TransacaoDTO;
 import com.desafio_itau_backend.models.Estatistica;
 import com.desafio_itau_backend.models.Transacao;
 import com.desafio_itau_backend.repository.TransacaoList;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -14,8 +16,15 @@ import java.util.List;
 public class TransacaoService {
     List<Transacao> transacaoList = new ArrayList<>();
 
-    public void adicionarTransacao(Transacao transacao){
-        transacaoList.add(transacao);
+    public void adicionarTransacao(TransacaoDTO transacaoDTO){
+        
+            if (transacaoDTO.dataHora().isBefore(OffsetDateTime.now()) && transacaoDTO.valor() >= 0 ) {
+                transacaoList.add(new Transacao(transacaoDTO.valor(), transacaoDTO.dataHora()));
+            } else {
+                throw new IllegalArgumentException("Data no futuro ou valor negativo");
+            }
+
+
     }
 
     public List<Transacao> retornaTransacoes(Integer intervaloSegundos){

@@ -4,12 +4,14 @@ import com.desafio_itau_backend.dto.TransacaoDTO;
 import com.desafio_itau_backend.models.Transacao;
 import com.desafio_itau_backend.repository.TransacaoList;
 import com.desafio_itau_backend.services.TransacaoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
+@Slf4j
 @RestController
 @RequestMapping("/transacao")
 
@@ -22,19 +24,15 @@ public class TransacaoController {
 
     @PostMapping
     ResponseEntity<?> recebeTransacao(@RequestBody TransacaoDTO transacaoDTO){
-        try{
-            if (transacaoDTO.dataHora().isBefore(OffsetDateTime.now()) && transacaoDTO.valor() >= 0 ){
-                Transacao transacao = new Transacao(transacaoDTO.valor(), transacaoDTO.dataHora());
-                transacaoService.adicionarTransacao(transacao);
-                return ResponseEntity.status(201).build();
-            } else {
-                return ResponseEntity.status(422).build();
-            }
+         try{
+             transacaoService.adicionarTransacao(transacaoDTO);
+             log.info("Transação realizada com sucesso");
+             return ResponseEntity.status(201).build();
+         }catch (IllegalArgumentException e){
+             log.info(e.getMessage());
+             return ResponseEntity.status(422).build();
+         }
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
     }
 
     @DeleteMapping
